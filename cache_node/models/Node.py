@@ -1,6 +1,7 @@
 class Node:
-    def __init__(self, key, val):
-        self.val = val
+    def __init__(self, key, data, expiration_date):
         self.key = key
-        self.prev = None
+        self.data = data
+        self.expiration_date = expiration_date
         self.next = None
+        self.prev = None
