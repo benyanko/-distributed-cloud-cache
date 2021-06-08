@@ -59,4 +59,4 @@ class LRUCache:
                 self.deleteNode(node)
 
 
-cache = LRUCache(100)
+cache = LRUCache(1000)
