@@ -25,20 +25,20 @@ class LRUCache:
     def get(self, key):
         if key in self.map:
             node = self.map[key]
-            result = node.val
+            result = node.data
             self.deleteNode(node)
             self.addToHead(node)
             return result
         return -1
 
-    def set(self, key, value):
+    def set(self, key, data):
         if key in self.map:
             node = self.map[key]
-            node.val = value
+            node.data = data
             self.deleteNode(node)
             self.addToHead(node)
         else:
-            node = Node(key, value)
+            node = Node(key, data)
             self.map[key] = node
             if self.count < self.capacity:
                 self.count += 1
