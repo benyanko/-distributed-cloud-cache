@@ -8,8 +8,8 @@ class LRUCache:
     def __init__(self, capacity):
         self.capacity = capacity
         self.map = {}
-        self.head = Node(0, 0)
-        self.tail = Node(0, 0)
+        self.head = Node(0, 0, datetime.datetime.utcnow().isoformat())
+        self.tail = Node(0, 0, datetime.datetime.utcnow().isoformat())
         self.head.next = self.tail
         self.tail.prev = self.head
         self.count = 0
@@ -24,28 +24,26 @@ class LRUCache:
         node.prev = self.head
         self.head.next = node
 
-    def clean(self):
-        for node in self.map:
-            if node.expiration_date < datetime.datetime.utcnow().isoformat():
-                self.deleteNode(node)
-
     def get(self, key):
         if key in self.map:
             node = self.map[key]
-            result = node.data
-            self.deleteNode(node)
-            self.addToHead(node)
-            return result
-        return -1
+            if node.expiration_date >= datetime.datetime.utcnow().isoformat():
+                result = node.data
+                self.deleteNode(node)
+                self.addToHead(node)
+                return result
+            else:
+                self.deleteNode(node)
+        return None
 
-    def set(self, key, data):
+    def set(self, key, data, expiration_date):
         if key in self.map:
             node = self.map[key]
             node.data = data
             self.deleteNode(node)
             self.addToHead(node)
         else:
-            node = Node(key, data)
+            node = Node(key, data, expiration_date)
             self.map[key] = node
             if self.count < self.capacity:
                 self.count += 1
@@ -55,3 +53,10 @@ class LRUCache:
                 self.deleteNode(self.tail.prev)
                 self.addToHead(node)
 
+    def clean(self):
+        for node in self.map:
+            if node.expiration_date < datetime.datetime.utcnow().isoformat():
+                self.deleteNode(node)
+
+
+cache = LRUCache(100)
