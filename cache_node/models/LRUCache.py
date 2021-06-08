@@ -1,3 +1,5 @@
+import datetime
+
 from cache_node.models import Node
 
 
@@ -21,6 +23,11 @@ class LRUCache:
         node.next.prev = node
         node.prev = self.head
         self.head.next = node
+
+    def clean(self):
+        for node in self.map:
+            if node.expiration_date < datetime.datetime.utcnow().isoformat():
+                self.deleteNode(node)
 
     def get(self, key):
         if key in self.map:
