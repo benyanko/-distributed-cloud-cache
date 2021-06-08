@@ -1,4 +1,4 @@
-from node.models import Node
+from cache_node.models import Node
 
 
 class LRUCache:
