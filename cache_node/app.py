@@ -13,15 +13,19 @@ def create_app():
     register_routes(api)
     api.init_app(app)
 
-    URL = os.getenv()
-    response = requests.get('/orchestrator/node', json={'url': URL})
-    if response.ok:
-        return app
-    else:
+    # TODO: need to verify env var name
+    URL = os.getenv("SERVER_URL")
+    try:
+        response = requests.get("/orchestrator/node", json={"url": URL})
+    except requests.RequestException:
         sys.exit(1)
+    else:
+        if response.ok:
+            return app
+        else:
+            sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = create_app()
     app.run(host="0.0.0.0")
-

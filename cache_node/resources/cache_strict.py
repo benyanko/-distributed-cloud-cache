@@ -7,10 +7,14 @@ from flask_restful import Resource
 class CacheStrict(Resource):
     def get(self, key):
         data = LRUCache.cache.get(key)
+
+        # TODO: return None
         if data:
             return {"data": data}, 200, ({"Content-Type": "application/json"})
         return {"msg": None}, 400, ({"Content-Type": "application/json"})
 
     def put(self, key, data, expiration_date):
         LRUCache.cache.set(key, data, expiration_date)
+
+        # TODO:  return ok
         return {"data": data}, 200, ({"Content-Type": "application/json"})
